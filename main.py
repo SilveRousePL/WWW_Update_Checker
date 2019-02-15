@@ -5,6 +5,7 @@ import os
 
 url = "https://kpz.pwr.edu.pl/"
 file = "kpz"
+soundfile = "sound.mp3"
 refresh_time = 5
 
 
@@ -34,11 +35,12 @@ def downloadSite(url):
     opener = urllib.request.build_opener()
     response = opener.open(request)
     htmlSource = response.read()
-    return htmlSource
+    return htmlSource.decode("utf-8")
 
 
 def updateAction():
     print(time.time(), ": ZAKTUALIZOWANO!!!")
+    os.popen("cvlc " + soundfile + " --play-and-exit") # Linux
 
 
 def noAction():
@@ -49,10 +51,7 @@ if not fileExist(file):
     saveFile(file, "")
 while True:
     data_file = loadFile(file)
-    data_www = downloadSite(url).decode("utf-8")
-    print(data_file)
-    print("\n")
-    print(data_www)
+    data_www = downloadSite(url)
     if data_file != data_www:
         saveFile(file, data_www)
         updateAction()
